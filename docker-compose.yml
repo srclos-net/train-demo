@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+
+  # ── Kiosk app (React + nginx) ───────────────────────────────────────────────
+  kiosk:
+    build:
+      context: ./kiosk
+    image: srclosson/train-demo-kiosk:latest
+    ports:
+      - "7000:80"
+    restart: unless-stopped
+    labels:
+      - "com.via-demo.role=kiosk"
+
+  # ── Load generator (Node.js) ────────────────────────────────────────────────
+  load-generator:
+    build:
+      context: ./load-generator
+    image: srclosson/train-demo-load-generator:latest
+    ports:
+      - "7001:3001"
+    environment:
+      - FARO_COLLECTOR_URL=https://faro-collector-prod-ca-east-0.grafana.net/collect/761f498fabfa4e1df5a556870caf81c0
+      - PORT=3001
+    restart: unless-stopped
+    labels:
+      - "com.via-demo.role=load-generator"
+
+  # ── Load control UI (React + nginx + api proxy) ─────────────────────────────
+  load-ui:
+    build:
+      context: ./load-ui
+      args:
+        - VITE_API_URL=/api
+    image: srclosson/train-demo-load-ui:latest
+    ports:
+      - "7002:80"
+    depends_on:
+      - load-generator
+    restart: unless-stopped
+    labels:
+      - "com.via-demo.role=load-ui"
