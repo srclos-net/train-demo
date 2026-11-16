@@ -9,7 +9,11 @@ import {
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 
 export const faro = initializeFaro({
-  url: 'https://faro-collector-prod-ca-east-0.grafana.net/collect/761f498fabfa4e1df5a556870caf81c0',
+  // Estate faro-collector (fe-stackgen-run) instead of the Grafana Cloud
+  // collector this demo was originally built for. The receiver CORS policy
+  // allows *.stackgen.run, so the kiosk served from trains.stackgen.run is
+  // allowed; overridable per build with VITE_FARO_URL.
+  url: import.meta.env.VITE_FARO_URL ?? 'https://faro.stackgen.run/collect',
   app: {
     name: 'trainstation-kiosk',
     version: '1.0.0',

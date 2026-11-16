@@ -1,0 +1,57 @@
+# Hostnames for the train demo. Same pattern as the bank ingress:
+# letsencrypt-prod issuer, external-dns manages DNS for *.stackgen.run.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: train-kiosk
+  namespace: trains
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/hostname: trains.stackgen.run
+    external-dns.alpha.kubernetes.io/target: 212.2.243.121
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: trains.stackgen.run
+      http:
+        paths:
+          - backend:
+              service:
+                name: kiosk
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - trains.stackgen.run
+      secretName: train-kiosk-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: train-load-ui
+  namespace: trains
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/hostname: trains-load.stackgen.run
+    external-dns.alpha.kubernetes.io/target: 212.2.243.121
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: trains-load.stackgen.run
+      http:
+        paths:
+          - backend:
+              service:
+                name: load-ui
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - trains-load.stackgen.run
+      secretName: train-load-ui-tls

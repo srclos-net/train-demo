@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import { v4 as uuidv4 } from 'uuid';
 
 const COLLECTOR_URL = process.env.FARO_COLLECTOR_URL ||
-  'https://faro-collector-prod-ca-east-0.grafana.net/collect/761f498fabfa4e1df5a556870caf81c0';
+  'https://faro.stackgen.run/collect';
 
 const APP = {
   name:        'trainstation-kiosk',

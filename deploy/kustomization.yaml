@@ -1,0 +1,16 @@
+# Deploy layer for Argo CD (Application in deploy/argocd.yaml; path=deploy).
+# CI pins image tags here after every push to main (see .github/scripts).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - kiosk.yaml
+  - load-generator.yaml
+  - load-ui.yaml
+  - ingress.yaml
+images:
+  - name: ghcr.io/srclos-net/train-demo-kiosk
+    newTag: sha-latest
+  - name: ghcr.io/srclos-net/train-demo-load-generator
+    newTag: sha-latest
+  - name: ghcr.io/srclos-net/train-demo-load-ui
+    newTag: sha-latest

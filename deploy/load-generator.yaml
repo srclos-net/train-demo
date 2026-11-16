@@ -1,0 +1,49 @@
+# load-generator: Node engine simulating 28 kiosks, emitting REAL Faro
+# beacons over HTTP to the estate faro-collector (the same edge the bank UI
+# uses). The RUM dashboard picks it up as service_name=trainstation-kiosk.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-generator
+  namespace: trains
+  labels:
+    app.kubernetes.io/name: load-generator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: load-generator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: load-generator
+    spec:
+      containers:
+        - name: load-generator
+          image: ghcr.io/srclos-net/train-demo-load-generator
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: FARO_COLLECTOR_URL
+              value: https://faro.stackgen.run/collect
+            - name: PORT
+              value: "3001"
+          ports:
+            - containerPort: 3001
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-generator
+  namespace: trains
+spec:
+  selector:
+    app.kubernetes.io/name: load-generator
+  ports:
+    - port: 3001
+      targetPort: 3001

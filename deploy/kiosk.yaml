@@ -1,0 +1,44 @@
+# train-demo on fe-stackgen-run, namespace: trains
+# kiosk: static SPA served by nginx; Faro web SDK inside the bundle beacons
+# to https://faro.stackgen.run/collect (see kiosk/src/faro.js).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kiosk
+  namespace: trains
+  labels:
+    app.kubernetes.io/name: kiosk
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kiosk
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kiosk
+    spec:
+      containers:
+        - name: kiosk
+          image: ghcr.io/srclos-net/train-demo-kiosk
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiosk
+  namespace: trains
+spec:
+  selector:
+    app.kubernetes.io/name: kiosk
+  ports:
+    - port: 80
+      targetPort: 80
