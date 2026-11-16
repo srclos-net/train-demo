@@ -1,0 +1,28 @@
+# SSO gate for the load control panel: reuses the shared oauth2-proxy
+# (otel-demo.stackgen.run, Google provider, *.stackgen.run cookie domain)
+# via its nginx+lua error-page redirector on port 8080 — same pattern as
+# the locust gate (martian-bank/deploy/manifests/locust-sso.yaml) and
+# kube-civo-auth. Unauthenticated requests get a 302 to Google sign-in and
+# come back with the session cookie.
+#
+# The kiosk (trains.stackgen.run) deliberately stays public.
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: trains-load-sso
+  namespace: trains
+  labels:
+    app.kubernetes.io/part-of: train-demo
+spec:
+  forwardAuth:
+    # ClusterIP pinned, matching the proven kube-civo-auth/locust pattern
+    # (traefik resolves service DNS unreliably in the hostNetwork daemonset
+    # here). If the oauth-redirector Service is recreated, re-read:
+    #   kubectl -n otel-demo get svc oauth-redirector -o jsonpath='{.spec.clusterIP}'
+    # and update this address (via git — Argo self-heals it).
+    address: http://10.43.219.1:8080/
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Auth-Request-Email
+      - X-Auth-Request-User
+      - Set-Cookie

@@ -38,6 +38,8 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: trains-load.stackgen.run
     external-dns.alpha.kubernetes.io/target: 212.2.243.121
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    # Google SSO via the shared oauth2-proxy/redirector (see sso.yaml).
+    traefik.ingress.kubernetes.io/router.middlewares: trains-trains-load-sso@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:

@@ -6,6 +6,7 @@ resources:
   - kiosk.yaml
   - load-generator.yaml
   - load-ui.yaml
+  - sso.yaml
   - ingress.yaml
 images:
   - name: ghcr.io/srclos-net/train-demo-kiosk
