@@ -9,8 +9,8 @@ resources:
   - ingress.yaml
 images:
   - name: ghcr.io/srclos-net/train-demo-kiosk
-    newTag: sha-latest
+    newTag: sha-6e75bef
   - name: ghcr.io/srclos-net/train-demo-load-generator
-    newTag: sha-latest
+    newTag: sha-6e75bef
   - name: ghcr.io/srclos-net/train-demo-load-ui
-    newTag: sha-latest
+    newTag: sha-6e75bef
