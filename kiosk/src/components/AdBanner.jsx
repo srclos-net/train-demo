@@ -2,19 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { ADS } from '../data.js';
 import { pushMeasurement, pushError, pushEvent } from '../faro.js';
 
-export default function AdBanner({ disabled }) {
+export default function AdBanner() {
   const [index, setIndex] = useState(0);
   const timer = useRef(null);
 
   useEffect(() => {
-    if (disabled) {
-      clearInterval(timer.current);
-      const err = new Error('AdService: Failed to fetch creative assets');
-      pushError(err, { statusCode: 404, service: 'ad-creative-cdn' });
-      pushEvent('ad_service_failure', { reason: 'missing_assets' });
-      return;
-    }
-
     timer.current = setInterval(() => {
       setIndex(i => {
         const next = (i + 1) % ADS.length;
@@ -24,22 +16,7 @@ export default function AdBanner({ disabled }) {
     }, 4000);
 
     return () => clearInterval(timer.current);
-  }, [disabled]);
-
-  if (disabled) {
-    return (
-      <div style={{
-        height: 80, background: '#0d0f1a',
-        border: '1px dashed #2a2d3e',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-      }}>
-        <div className="pulse" style={{ width: 8, height: 8, background: '#e94560', borderRadius: '50%' }} />
-        <div style={{ fontSize: 11, color: '#e94560', letterSpacing: 2 }}>
-          AD SERVICE UNAVAILABLE — REVENUE IMPACT DETECTED
-        </div>
-      </div>
-    );
-  }
+  }, []);
 
   const ad = ADS[index];
   return (

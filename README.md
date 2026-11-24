@@ -4,7 +4,7 @@ Full-stack demo for Grafana Cloud Frontend Observability. Three services:
 
 | Service | Port | Purpose |
 |---------|------|---------|
-| `kiosk` | 8080 | The React train booking app with fault injection |
+| `kiosk` | 8080 | The React train booking app |
 | `load-generator` | 3001 | Node.js engine — 28 virtual kiosks across 3 regions sending real Faro signals |
 | `load-ui` | 8081 | React control panel — inject/clear regional faults in realtime |
 
@@ -18,8 +18,8 @@ docker compose up --build
 ```
 
 Then open:
-- **http://localhost:8080** — kiosk app (manual fault injection)
-- **http://localhost:8081** — load control UI (regional fault injection)
+- **http://localhost:8080** — kiosk app
+- **http://localhost:8081** — load control UI (regional faults + via-trains backend fault control)
 
 ## Architecture
 
