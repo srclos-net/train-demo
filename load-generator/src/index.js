@@ -3,6 +3,7 @@ import cors from 'cors';
 import { REGIONS, FAULT_TYPES } from './data.js';
 import { VirtualKiosk } from './kiosk.js';
 import { FaultManager } from './faultManager.js';
+import { createBackendFaultsRouter } from './backendFaults.js';
 
 const PORT = process.env.PORT || 3001;
 
@@ -123,6 +124,9 @@ app.post('/fault/clear-all', (req, res) => {
   faultManager.clearAll();
   res.json({ ok: true });
 });
+
+// /backend-faults — relay to the real via-trains booking-service fault API
+app.use(createBackendFaultsRouter(process.env.BOOKING_SERVICE_URL || 'http://host.docker.internal:5080'));
 
 app.listen(PORT, () => {
   console.log(`[api] Load generator API listening on :${PORT}`);

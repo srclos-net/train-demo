@@ -23,6 +23,9 @@ services:
     environment:
       - FARO_COLLECTOR_URL=https://faro-collector-prod-ca-east-0.grafana.net/collect/761f498fabfa4e1df5a556870caf81c0
       - PORT=3001
+      # Local: booking-service on the host. k8s: set to the in-cluster service DNS,
+      # e.g. http://booking-service.trains.svc.cluster.local:80
+      - BOOKING_SERVICE_URL=http://host.docker.internal:5080
     restart: unless-stopped
     labels:
       - "com.via-demo.role=load-generator"
