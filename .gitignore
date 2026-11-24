@@ -1,3 +1,4 @@
 .env
 node_modules/
 load-ui/dist/
+kiosk/dist/
