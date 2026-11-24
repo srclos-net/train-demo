@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import BackendFaults from './components/BackendFaults.jsx'
 
 const API = import.meta.env.VITE_API_URL || '/api'
 
@@ -184,6 +185,9 @@ export default function App() {
               </div>
             </div>
           )}
+
+          {/* BACKEND FAULTS — global via-trains booking-service controls */}
+          <BackendFaults />
         </div>
 
         {/* RIGHT SIDEBAR — log + fault builder */}
